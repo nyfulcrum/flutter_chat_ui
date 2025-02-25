@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:intl/intl.dart' hide TextDirection;
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../conditional/conditional.dart';
@@ -208,18 +209,32 @@ class Message extends StatelessWidget {
   ) {
     final defaultMessage = (enlargeEmojis && hideBackgroundOnEmojiMessages)
         ? _messageBuilder()
-        : Container(
-            decoration: BoxDecoration(
-              borderRadius: borderRadius,
-              color: !currentUserIsAuthor ||
-                      message.type == types.MessageType.image
-                  ? InheritedChatTheme.of(context).theme.secondaryColor
-                  : InheritedChatTheme.of(context).theme.primaryColor,
-            ),
-            child: ClipRRect(
-              borderRadius: borderRadius,
-              child: _messageBuilder(),
-            ),
+        : Column(
+            crossAxisAlignment: currentUserIsAuthor ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: borderRadius,
+                  color: !currentUserIsAuthor ||
+                          message.type == types.MessageType.image
+                      ? InheritedChatTheme.of(context).theme.secondaryColor
+                      : InheritedChatTheme.of(context).theme.primaryColor,
+                ),
+                child: ClipRRect(
+                  borderRadius: borderRadius,
+                  child: _messageBuilder(),
+                ),
+              ),
+              if (!roundBorder)
+              Align( alignment: currentUserIsAuthor ? Alignment.centerRight : Alignment.centerLeft,
+                child: Text(
+                  style: InheritedChatTheme.of(context).theme.lastBubbleTimeStampTextStyle,
+                  DateFormat.jm().format(
+                    DateTime.fromMillisecondsSinceEpoch(message.createdAt ?? 0),
+                  ),
+                ),
+                )
+            ],
           );
     return bubbleBuilder != null
         ? bubbleBuilder!(
@@ -317,28 +332,29 @@ class Message extends StatelessWidget {
             );
     final messageBorderRadius =
         InheritedChatTheme.of(context).theme.messageBorderRadius;
-    final borderRadius = bubbleRtlAlignment == BubbleRtlAlignment.left
-        ? BorderRadiusDirectional.only(
-            bottomEnd: Radius.circular(
-              !currentUserIsAuthor || roundBorder ? messageBorderRadius : 0,
-            ),
-            bottomStart: Radius.circular(
-              currentUserIsAuthor || roundBorder ? messageBorderRadius : 0,
-            ),
-            topEnd: Radius.circular(messageBorderRadius),
-            topStart: Radius.circular(messageBorderRadius),
-          )
-        : BorderRadius.only(
-            bottomLeft: Radius.circular(
-              currentUserIsAuthor || roundBorder ? messageBorderRadius : 0,
-            ),
-            bottomRight: Radius.circular(
-              !currentUserIsAuthor || roundBorder ? messageBorderRadius : 0,
-            ),
-            topLeft: Radius.circular(messageBorderRadius),
-            topRight: Radius.circular(messageBorderRadius),
-          );
-
+    final borderRadius = BorderRadiusDirectional.circular(messageBorderRadius);
+    // final borderRadius = bubbleRtlAlignment == BubbleRtlAlignment.left
+    //     ? BorderRadiusDirectional.only(
+    //         bottomEnd: Radius.circular(
+    //           !currentUserIsAuthor || roundBorder ? messageBorderRadius : 0,
+    //         ),
+    //         bottomStart: Radius.circular(
+    //           currentUserIsAuthor || roundBorder ? messageBorderRadius : 0,
+    //         ),
+    //         topEnd: Radius.circular(messageBorderRadius),
+    //         topStart: Radius.circular(messageBorderRadius),
+    //       )
+    //     : BorderRadius.only(
+    //         bottomLeft: Radius.circular(
+    //           currentUserIsAuthor || roundBorder ? messageBorderRadius : 0,
+    //         ),
+    //         bottomRight: Radius.circular(
+    //           !currentUserIsAuthor || roundBorder ? messageBorderRadius : 0,
+    //         ),
+    //         topLeft: Radius.circular(messageBorderRadius),
+    //         topRight: Radius.circular(messageBorderRadius),
+    //       );
+    //
     final bubbleMargin = InheritedChatTheme.of(context).theme.bubbleMargin ??
         (bubbleRtlAlignment == BubbleRtlAlignment.left
             ? EdgeInsetsDirectional.only(
