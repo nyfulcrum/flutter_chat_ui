@@ -84,6 +84,7 @@ abstract class ChatTheme {
     required this.messageInsetsVertical,
     required this.messageMaxWidth,
     required this.primaryColor,
+    this.lastBubbleTimeStampTextStyle,
     required this.receivedEmojiMessageTextStyle,
     this.receivedMessageBodyBoldTextStyle,
     this.receivedMessageBodyCodeTextStyle,
@@ -117,6 +118,8 @@ abstract class ChatTheme {
     required this.userNameTextStyle,
     this.highlightMessageColor,
   });
+
+  final TextStyle? lastBubbleTimeStampTextStyle;
 
   /// Icon for select attachment button.
   final Widget? attachmentButtonIcon;
@@ -321,6 +324,7 @@ class DefaultChatTheme extends ChatTheme {
   /// override only a couple of properties, otherwise create a new class
   /// which extends [ChatTheme].
   const DefaultChatTheme({
+    super.lastBubbleTimeStampTextStyle,
     super.attachmentButtonIcon,
     super.attachmentButtonMargin,
     super.backgroundColor = neutral7,
@@ -498,6 +502,7 @@ class DarkChatTheme extends ChatTheme {
   /// override only a couple of properties, otherwise create a new class
   /// which extends [ChatTheme].
   const DarkChatTheme({
+    super.lastBubbleTimeStampTextStyle,
     super.attachmentButtonIcon,
     super.attachmentButtonMargin,
     super.backgroundColor = dark,
