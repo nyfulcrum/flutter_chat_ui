@@ -107,7 +107,10 @@ class Chat extends StatefulWidget {
     this.isLeftStatus = false,
     this.messageWidthRatio = 0.72,
     this.backgroundImage,
+    this.hasPreview,
   });
+  // If the input box has file previews.
+  final bool? hasPreview;
 
   /// Background image for the chat. If provided, it will be rendered behind the chat widget.
   /// [Background Image] widget will be rendered on top of this image.
@@ -607,7 +610,6 @@ class ChatState extends State<Chat> {
         showUserNames: widget.showUserNames,
         timeFormat: widget.timeFormat,
         messagesSpacerHeight: widget.messagesSpacerHeight,
-
       );
 
       _chatMessages = result[0] as List<Object>;
@@ -637,7 +639,7 @@ class ChatState extends State<Chat> {
                 /// [Background Image] widget will be rendered on top of this image.
                 if (widget.backgroundImage != null)
                   Positioned.fill(
-                    child: widget.backgroundImage ?? SizedBox(),
+                    child: widget.backgroundImage ?? const SizedBox(),
                   ),
                 Container(
                   color: widget.theme.backgroundColor,
@@ -691,6 +693,7 @@ class ChatState extends State<Chat> {
                             onAttachmentPressed: widget.onAttachmentPressed,
                             onSendPressed: widget.onSendPressed,
                             options: widget.inputOptions,
+                            hasPreview: widget.hasPreview ?? false,
                           ),
                     ],
                   ),

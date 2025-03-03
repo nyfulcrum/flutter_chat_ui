@@ -22,6 +22,7 @@ class Input extends StatefulWidget {
     this.onAttachmentPressed,
     required this.onSendPressed,
     this.options = const InputOptions(),
+    required this.hasPreview,
   });
 
   /// Whether attachment is uploading. Will replace attachment button with a
@@ -39,6 +40,8 @@ class Input extends StatefulWidget {
 
   /// Customisation options for the [Input].
   final InputOptions options;
+
+  final bool hasPreview;
 
   @override
   State<Input> createState() => _InputState();
@@ -96,7 +99,7 @@ class _InputState extends State<Input> {
 
   void _handleSendPressed() {
     final trimmedText = _textController.text.trim();
-    if (trimmedText != '') {
+    if (trimmedText != '' || widget.hasPreview) {
       final partialText = types.PartialText(text: trimmedText);
       widget.onSendPressed(partialText);
 
